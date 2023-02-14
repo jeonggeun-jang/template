@@ -17,8 +17,9 @@ class MainTextField extends StatelessWidget {
       height: 53.0,
       color: const Color(0xffd5e3ff),
       padding: const EdgeInsets.all(5.0),
-      child: TextField(
-        autofocus: true,
+      child: TextFormField(
+        //focusNode: context.read<MessageProperties>().focusNode,
+        autofocus: false,
         controller: context.read<MessageProperties>().textEditingController,
         decoration: InputDecoration(
           enabledBorder: lineStyle,
@@ -34,7 +35,7 @@ class MainTextField extends StatelessWidget {
             onPressed: () => context.read<MessageProperties>().saveClientMessage()
           ),
         ),
-        onEditingComplete: () => context.read<MessageProperties>().saveClientMessage(),
+        onEditingComplete: () =>context.read<MessageProperties>().saveClientMessage()
       ),
     );
   }

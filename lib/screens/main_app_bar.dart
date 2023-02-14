@@ -8,12 +8,21 @@ class MainAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      leading: Builder(
+        builder: (BuildContext context) {
+          return IconButton(
+            onPressed: () => Scaffold.of(context).openDrawer(),
+            icon: const Icon(Icons.menu),
+            tooltip: '탭하여 메뉴 확인',
+          );
+        },
+      ),
       pinned: false,
       floating: true,
       backgroundColor: const Color(0xffd5e3ff),
       flexibleSpace: FlexibleSpaceBar(
         title: GestureDetector(
-          onTap: context.read<MessageProperties>().scrollEvent,
+          onTap: () => context.read<MessageProperties>().scrollEvent(),
           child: MouseRegion(
             cursor: SystemMouseCursors.click,
             child: Tooltip(
@@ -28,4 +37,3 @@ class MainAppBar extends StatelessWidget {
     );
   }
 }
-
