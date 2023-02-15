@@ -39,6 +39,7 @@ dependencies:
   flutter_html: ^2.2.1
   device_info_plus: ^8.1.0
   confetti: ^0.7.0
+  dio: ^5.0.0
 
 dev_dependencies:
   flutter_test:

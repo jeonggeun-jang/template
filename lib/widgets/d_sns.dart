@@ -40,7 +40,7 @@ class DSns extends StatelessWidget {
           ),
         ],
       ),
-    );;
+    );
   }
 }
 

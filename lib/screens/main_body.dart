@@ -10,12 +10,13 @@ class MainBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        childCount: context.select((MessageProperties m) => m.clientMessage.length),
+        childCount: context.select((MessageProperties m) => m.agentMessage.length),
         (context, index) => ListTile(
           contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              index == 0 ? const Visibility(visible: false, child: Text('Trigger')) :
               Card(
                 elevation: 0.0,
                 color: const Color(0xffffffff),
@@ -26,6 +27,7 @@ class MainBody extends StatelessWidget {
               ),
               const SizedBox(height: 8.0),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const CircleAvatar(
                     backgroundImage: AssetImage('assets/images/character.png'),
@@ -36,24 +38,26 @@ class MainBody extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Card(
-                        elevation: 0.0,
-                        color: const Color(0xfff3ffff),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: const [
-                                  Text('차차 ', style: TextStyle(color: Color(0xff001555), fontSize: 15, fontWeight: FontWeight.bold)),
-                                  Text('오후 2:03', style: TextStyle(color: Color(0xff001555), fontSize: 13)),
-                                ],
-                              ),
-                              Html(data: context.read<MessageProperties>().clientMessage[index], shrinkWrap: true,
-                                style: {"body":Style(margin: EdgeInsets.zero, padding: EdgeInsets.zero)},
-                              ),
-                            ],
+                      Container(
+                        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 65),
+                        child: Card(
+                          elevation: 0.0,
+                          color: const Color(0xffedf4ff),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Text('차차 ', style: TextStyle(color: Color(0xff001555), fontSize: 15, fontWeight: FontWeight.bold)),
+                                    Text(context.read<MessageProperties>().dateTime[index], style: const TextStyle(color: Color(0xff001555), fontSize: 13)),
+                                  ],
+                                ),
+                                Html(data: context.watch<MessageProperties>().agentMessage[index], shrinkWrap: true, style: {"body":Style(margin: EdgeInsets.zero, padding: EdgeInsets.zero)},
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -63,7 +67,7 @@ class MainBody extends StatelessWidget {
               ),
             ],
           ),
-        )
+        ) /*여기가 List Tile!!!!!!!!!!*/
       )
     );
   }
