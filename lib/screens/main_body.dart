@@ -17,13 +17,19 @@ class MainBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               index == 0 ? const Visibility(visible: false, child: Text('Trigger')) :
-              Card(
-                elevation: 0.0,
-                color: const Color(0xffffffff),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(context.read<MessageProperties>().clientMessage[index], style: const TextStyle(color: Color(0xff8da5a3))),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(context.read<MessageProperties>().dateTime[index], style: const TextStyle(color: Color(0xff001555), fontSize: 13)),
+                  Card(
+                    elevation: 0.0,
+                    color: const Color(0xffffffff),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(context.read<MessageProperties>().clientMessage[index], style: const TextStyle(color: Color(0xff8da5a3))),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 8.0),
               Row(
@@ -54,6 +60,7 @@ class MainBody extends StatelessWidget {
                                     Text(context.read<MessageProperties>().dateTime[index], style: const TextStyle(color: Color(0xff001555), fontSize: 13)),
                                   ],
                                 ),
+                                context.read<MessageProperties>().agentMessageImage[index] == 'none' ? const Visibility(visible: false, child: Text('NONE')) : Image.network(context.read<MessageProperties>().agentMessageImage[index]),
                                 Html(data: context.watch<MessageProperties>().agentMessage[index], shrinkWrap: true, style: {"body":Style(margin: EdgeInsets.zero, padding: EdgeInsets.zero)},
                                 )
                               ],

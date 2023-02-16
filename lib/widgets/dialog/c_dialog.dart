@@ -1,6 +1,5 @@
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:template/models/message_properties.dart';
 
@@ -39,7 +38,7 @@ class _CDialogState extends State<CDialog> {
           blastDirectionality: BlastDirectionality.explosive,
           numberOfParticles: 10,
           minBlastForce: 10,
-          maxBlastForce: 50,
+          maxBlastForce: 30,
         ),
         Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
@@ -47,7 +46,7 @@ class _CDialogState extends State<CDialog> {
             clipBehavior: Clip.none, alignment: Alignment.topCenter,
             children: [
               SizedBox(
-                height: 400,
+                height: 350,
                 width: 250,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

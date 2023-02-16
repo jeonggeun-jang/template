@@ -51,39 +51,6 @@ class _MainPageState extends State<MainPage> {
         context: context,
         builder: (BuildContext context) => const CDialog()
       );
-
-      /*final dio = Dio();
-      List<String> greeting = [];
-      List<String> greetingImage = [];
-
-      final response = await dio.post(
-        'https://hsmst.cnu.ac.kr/hyperchatbot-engine/deploy/10016/dialog',
-        data: {"userMessage": "", "userId": 0},
-        options: Options(
-          headers: {'Accept': 'application/json', 'content-type': 'application/json'},
-          contentType: 'application/json',
-          method: 'POST',
-        )
-      );
-
-      Logger().d(response);
-
-      var myJson = jsonDecode(response.toString())['replyMessage'].toString();
-      var convertProtocol = myJson.replaceAll('http', 'https');
-      var convertDomain = convertProtocol.replaceAll('10.110.20.132:18088', 'hsmst.cnu.ac.kr');
-      var convertSpace = convertDomain.replaceAll('\\n', '<br>');
-      var convertJson = jsonDecode(convertSpace);
-
-      for(int i=0; i<convertJson.length; i++) {
-        if (convertJson[i]["type"] == 0) {
-          greeting.add(convertJson[i]["value"]);
-        } else if (convertJson[i]["type"] == 1) {
-          greetingImage.add(convertJson[i]["url"]);
-        }
-      }
-
-      Logger().d(greeting);
-      Logger().d(greetingImage);*/
     });
   }
 
@@ -101,6 +68,7 @@ class _MainPageState extends State<MainPage> {
         body: Padding(
           padding: const EdgeInsets.only(bottom: 53.0),
           child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
             controller: context.read<MessageProperties>().scrollController,
             slivers: const [
               MainAppBar(),
