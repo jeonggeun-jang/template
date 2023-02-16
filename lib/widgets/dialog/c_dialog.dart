@@ -46,7 +46,7 @@ class _CDialogState extends State<CDialog> {
             clipBehavior: Clip.none, alignment: Alignment.topCenter,
             children: [
               SizedBox(
-                height: 350,
+                height: 300,
                 width: 250,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -65,11 +65,12 @@ class _CDialogState extends State<CDialog> {
                 ),
               ),
               const Positioned(
-                top: -60,
+                top: -70,
                 child: CircleAvatar(
-                  backgroundColor: Color(0xffd5e3ff),
+                  //backgroundColor: Color(0xffd5e3ff),
+                  backgroundColor: Colors.transparent,
                   backgroundImage: AssetImage('assets/images/chatacter_f.png'),
-                  radius: 50,
+                  radius: 60,
                 )
               ),
             ],
