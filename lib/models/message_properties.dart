@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:logger/logger.dart';
+import 'package:flutter/material.dart';
 
 class MessageProperties extends ChangeNotifier {
 
@@ -15,9 +14,12 @@ class MessageProperties extends ChangeNotifier {
 
   List<String> agentMessage = [];
   List<String> agentMessageImage = [];
-  List<String> agentMessageButton = [];
+  List<dynamic> agentMessageButton = [];
+  List agentButton = [];
 
   List<String> dateTime = [];
+
+  //List<dynamic> testButton = [];
 
   bool scrollEventSwitch = true;
 
@@ -29,7 +31,7 @@ class MessageProperties extends ChangeNotifier {
   void saveClientMessage() {
     if (textEditingController.text.isNotEmpty) {
       clientMessage.add(textEditingController.text);
-      postGreeting(textEditingController.text);
+      postGreeting(textEditingController.text, 0);
       textEditingController.clear();
     }
     notifyListeners();
@@ -42,10 +44,10 @@ class MessageProperties extends ChangeNotifier {
     notifyListeners();
   }
 
-  void postGreeting(String text) async {
+  void postGreeting(String text, int type) async {
     DateTime dt = DateTime.now();
-    var hourData;
-    var minuteData;
+    String hourData;
+    String minuteData;
     dt.hour > 12 ? hourData = '오후 ${(dt.hour - 12).toString()}:' : hourData = '오전 ${dt.hour}:';
     dt.minute < 10 ? minuteData = '0${dt.minute}' : minuteData = '${dt.minute}';
 
@@ -56,33 +58,46 @@ class MessageProperties extends ChangeNotifier {
       userMessage = text;
     }
 
-    final response = await dio.post(
-      'https://hsmst.cnu.ac.kr/hyperchatbot-engine/deploy/10019/dialog',
-      //'https://hsmst.cnu.ac.kr/hyperchatbot-engine/deploy/10016/dialog',
-      data: {'userMessage': userMessage, 'userId': 0},
-      options: Options(
-        headers: {'Accept': 'application/json', 'content-type': 'application/json'},
-        contentType: 'application/json',
-        method: 'POST',
-      )
-    );
+    var response;
 
-    var myJson = jsonDecode(response.toString())['replyMessage'].toString();
+    if(type == 0) {
+      response = await dio.post(
+          'https://hsmst.cnu.ac.kr/hyperchatbot-engine/deploy/10019/dialog',
+          //'https://t-aichatbot.catholic.kr:10443/hyperchatbot-engine/deploy/6/dialog',
+          //'https://hsmst.cnu.ac.kr/hyperchatbot-engine/deploy/10016/dialog',
+          data: {'userMessage': userMessage, 'userId': 0},
+          options: Options(
+            headers: {'Accept': 'application/json', 'content-type': 'application/json'},
+            contentType: 'application/json',
+            method: 'POST',
+          )
+      );
+    } else if (type == 1) {
+      response = await dio.post(
+          'https://hsmst.cnu.ac.kr/hyperchatbot-engine/deploy/10019/dialog',
+          //'https://t-aichatbot.catholic.kr:10443/hyperchatbot-engine/deploy/6/dialog',
+          //'https://hsmst.cnu.ac.kr/hyperchatbot-engine/deploy/10016/dialog',
+          data: {'intentId': userMessage, 'userId': 0},
+          options: Options(
+            headers: {'Accept': 'application/json', 'content-type': 'application/json'},
+            contentType: 'application/json',
+            method: 'POST',
+          )
+      );
+    }
+
+    var myJson = jsonDecode(response.toString())['replyMessage'].toString().replaceAll('정의할 수 없는 에러', '아이코 제게는 아직 그런 내용을 해석할 준비가 되지 않았어요 😥');
     var convertProtocol = myJson.replaceAll('http', 'https');
     var convertDomain = convertProtocol.replaceAll('10.110.20.132:18088', 'hsmst.cnu.ac.kr');
     var convertSpace = convertDomain.replaceAll('\\n', '<br>');
     final dataList = jsonDecode(convertSpace);
 
-    //Logger().d(dataList);
-
     var imgCheck = false;
-    var buttonTempText = [];
-    var buttonTempIntent = [];
-    var buttonTempUrl = [];
 
+    var buttonList = [];
     // 내가 필요한 정보 : 텍스트, 버튼 인텐트
-
     for (int i=0; i<dataList.length; i++) {
+      List tempButton = [];
       switch (dataList[i]["type"]) {
         case 0 :
           agentMessage.add(dataList[i]['value']);
@@ -96,24 +111,60 @@ class MessageProperties extends ChangeNotifier {
           for (int j=0; j<dataList[i]['buttonElements'].length; j++) {
             switch (dataList[i]['buttonElements'][j]['type']) {
               case 0 :
-                buttonTempText.add(dataList[i]['buttonElements'][j]['value']);
+                tempButton.add(dataList[i]['buttonElements'][j]['value']);
                 break;
               case 3 :
-                buttonTempIntent.add(dataList[i]['buttonElements'][j]['intentId']);
+                tempButton.add(dataList[i]['buttonElements'][j]['intentId'].toString());
                 break;
               case 4 :
-                buttonTempUrl.add(dataList[i]['buttonElements'][j]['url']);
+                tempButton.add(dataList[i]['buttonElements'][j]['url']);
                 break;
+              case 5 :
+                tempButton.add(dataList[i]['buttonElements'][j]['url']);
+            }
+            if(tempButton.length == 2) {
+              buttonList.add(
+                Padding(padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: TextButton(
+                    onPressed: () => saveIntentMessage(tempButton[0], tempButton[1]),
+                    child: Text(tempButton[0])
+                  )
+                )
+              );
             }
           }
       }
     }
-    Logger().d(buttonTempText);
-    Logger().d(buttonTempIntent);
-    Logger().d(buttonTempUrl);
+
+    if(buttonList.isNotEmpty) {
+      agentButton.add(
+        Padding(
+          padding: const EdgeInsets.only(top: 10.0),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 42.0 * buttonList.length,
+                child: ListView.builder(
+                  itemCount: buttonList.length,
+                  itemBuilder: (context, index) => buttonList[index]
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else if (buttonList.isEmpty) {
+      agentButton.add('none');
+    }
+
     if (!imgCheck) agentMessageImage.add('none');
 
     scrollBindingEvent();
+  }
+
+  void saveIntentMessage(String clientText, String intent) {
+    clientMessage.add(clientText);
+    postGreeting(intent, 1);
     notifyListeners();
   }
 }

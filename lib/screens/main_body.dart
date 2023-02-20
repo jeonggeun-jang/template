@@ -61,8 +61,10 @@ class MainBody extends StatelessWidget {
                                   ],
                                 ),
                                 context.read<MessageProperties>().agentMessageImage[index] == 'none' ? const Visibility(visible: false, child: Text('NONE')) : Image.network(context.read<MessageProperties>().agentMessageImage[index]),
-                                Html(data: context.watch<MessageProperties>().agentMessage[index], shrinkWrap: true, style: {"body":Style(margin: EdgeInsets.zero, padding: EdgeInsets.zero)},
-                                )
+                                Html(data: context.watch<MessageProperties>().agentMessage[index], shrinkWrap: true, style: {"body":Style(margin: EdgeInsets.zero, padding: EdgeInsets.zero)}),
+                                context.read<MessageProperties>().agentButton[index] == 'none'
+                                  ? const Visibility(visible: false, child: Text('NONE'))
+                                  : context.read<MessageProperties>().agentButton[index]
                               ],
                             ),
                           ),

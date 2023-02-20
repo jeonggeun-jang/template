@@ -18,7 +18,7 @@ class _CDialogState extends State<CDialog> {
   void initState() {
     super.initState();
     confettiController.play();
-    context.read<MessageProperties>().postGreeting('greeting');
+    context.read<MessageProperties>().postGreeting('greeting', 0);
   }
 
   @override
