@@ -160,6 +160,7 @@ class MessageProperties extends ChangeNotifier {
     if (!imgCheck) agentMessageImage.add('none');
 
     scrollBindingEvent();
+    notifyListeners();
   }
 
   void saveIntentMessage(String clientText, String intent) {
