@@ -30,9 +30,12 @@ class MainTextField extends StatelessWidget {
           fillColor: Colors.white,
           filled: true,
           border: InputBorder.none,
-          suffixIcon: IconButton(
-            icon: const Icon(Icons.send, color: Color(0xff001555)),
-            onPressed: () => context.read<MessageProperties>().saveClientMessage()
+          suffixIcon: Tooltip(
+            message: '텍스트 전송',
+            child: IconButton(
+              icon: const Icon(Icons.send, color: Color(0xff001555)),
+              onPressed: () => context.read<MessageProperties>().saveClientMessage()
+            ),
           ),
         ),
         onEditingComplete: () =>context.read<MessageProperties>().saveClientMessage()

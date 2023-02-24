@@ -23,15 +23,16 @@ class MainBody extends StatelessWidget {
                   Text(context.read<MessageProperties>().dateTime[index], style: const TextStyle(color: Color(0xff001555), fontSize: 13)),
                   Card(
                     elevation: 0.0,
-                    color: const Color(0xffffffff),
+                    color: const Color(0xffD5E1FF),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Text(context.read<MessageProperties>().clientMessage[index], style: const TextStyle(color: Color(0xff8da5a3))),
+                      child: Text(context.read<MessageProperties>().clientMessage[index], style: const TextStyle(color: Color(0xff000000))),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 8.0),
+
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -60,7 +61,12 @@ class MainBody extends StatelessWidget {
                                     Text(context.read<MessageProperties>().dateTime[index], style: const TextStyle(color: Color(0xff001555), fontSize: 13)),
                                   ],
                                 ),
-                                context.read<MessageProperties>().agentMessageImage[index] == 'none' ? const Visibility(visible: false, child: Text('NONE')) : Image.network(context.read<MessageProperties>().agentMessageImage[index]),
+                                context.read<MessageProperties>().agentMessageImage[index] == 'none' ? const Visibility(visible: false, child: Text('NONE')) :
+                                Center(
+                                  child: SizedBox(
+                                    height: MediaQuery.of(context).size.height / 3.5,
+                                    child: Image.network(context.read<MessageProperties>().agentMessageImage[index])),
+                                ),
                                 Html(data: context.watch<MessageProperties>().agentMessage[index], shrinkWrap: true, style: {"body":Style(margin: EdgeInsets.zero, padding: EdgeInsets.zero)}),
                                 context.read<MessageProperties>().agentButton[index] == 'none'
                                   ? const Visibility(visible: false, child: Text('NONE'))

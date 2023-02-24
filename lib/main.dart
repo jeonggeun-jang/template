@@ -23,10 +23,12 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'CNU | CHATBOT',
+      title: '충남대학교',
       theme: ThemeData(
         useMaterial3: true,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        //materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        materialTapTargetSize: MaterialTapTargetSize.padded,
+        visualDensity: VisualDensity.standard,
       ),
       home: const MainPage(),
     );

@@ -69,7 +69,7 @@ class _CDialogState extends State<CDialog> {
                 child: CircleAvatar(
                   //backgroundColor: Color(0xffd5e3ff),
                   backgroundColor: Colors.transparent,
-                  backgroundImage: AssetImage('assets/images/chatacter_f.png'),
+                  backgroundImage: AssetImage('assets/images/character_f.png'),
                   radius: 60,
                 )
               ),

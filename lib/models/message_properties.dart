@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MessageProperties extends ChangeNotifier {
 
@@ -24,7 +25,7 @@ class MessageProperties extends ChangeNotifier {
   bool scrollEventSwitch = true;
 
   void scrollEvent() {
-    scrollController.animateTo(scrollController.position.minScrollExtent, duration: const Duration(milliseconds: 800), curve: Curves.easeInOut);
+    scrollController.animateTo(scrollController.position.minScrollExtent, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
     notifyListeners();
   }
 
@@ -39,7 +40,7 @@ class MessageProperties extends ChangeNotifier {
 
   void scrollBindingEvent() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      scrollController.animateTo(scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+      scrollController.animateTo(scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
     });
     notifyListeners();
   }
@@ -60,11 +61,11 @@ class MessageProperties extends ChangeNotifier {
 
     var response;
 
+
     if(type == 0) {
       response = await dio.post(
-          'https://hsmst.cnu.ac.kr/hyperchatbot-engine/deploy/10019/dialog',
-          //'https://t-aichatbot.catholic.kr:10443/hyperchatbot-engine/deploy/6/dialog',
-          //'https://hsmst.cnu.ac.kr/hyperchatbot-engine/deploy/10016/dialog',
+          //'https://hsmst.cnu.ac.kr/hyperchatbot-engine/deploy/10019/dialog',
+          'https://hsmst.cnu.ac.kr/hyperchatbot-engine/deploy/10016/dialog',
           data: {'userMessage': userMessage, 'userId': 0},
           options: Options(
             headers: {'Accept': 'application/json', 'content-type': 'application/json'},
@@ -74,9 +75,8 @@ class MessageProperties extends ChangeNotifier {
       );
     } else if (type == 1) {
       response = await dio.post(
-          'https://hsmst.cnu.ac.kr/hyperchatbot-engine/deploy/10019/dialog',
-          //'https://t-aichatbot.catholic.kr:10443/hyperchatbot-engine/deploy/6/dialog',
-          //'https://hsmst.cnu.ac.kr/hyperchatbot-engine/deploy/10016/dialog',
+          //'https://hsmst.cnu.ac.kr/hyperchatbot-engine/deploy/10019/dialog',
+          'https://hsmst.cnu.ac.kr/hyperchatbot-engine/deploy/10016/dialog',
           data: {'intentId': userMessage, 'userId': 0},
           options: Options(
             headers: {'Accept': 'application/json', 'content-type': 'application/json'},
@@ -87,7 +87,7 @@ class MessageProperties extends ChangeNotifier {
     }
 
     var myJson = jsonDecode(response.toString())['replyMessage'].toString().replaceAll('정의할 수 없는 에러', '아이코 제게는 아직 그런 내용을 해석할 준비가 되지 않았어요 😥');
-    var convertProtocol = myJson.replaceAll('http', 'https');
+    var convertProtocol = myJson.replaceAll('http://', 'https://');
     var convertDomain = convertProtocol.replaceAll('10.110.20.132:18088', 'hsmst.cnu.ac.kr');
     var convertSpace = convertDomain.replaceAll('\\n', '<br>');
     final dataList = jsonDecode(convertSpace);
@@ -126,7 +126,13 @@ class MessageProperties extends ChangeNotifier {
               buttonList.add(
                 Padding(padding: const EdgeInsets.symmetric(vertical: 5.0),
                   child: TextButton(
-                    onPressed: () => saveIntentMessage(tempButton[0], tempButton[1]),
+                    onPressed: () {
+                      if (tempButton[1].toString().contains('https')) {
+                        launchUrl(Uri.parse('${tempButton[1]}'));
+                      } else {
+                        saveIntentMessage(tempButton[0], tempButton[1]);
+                      }
+                    },
                     child: Text(tempButton[0])
                   )
                 )
@@ -143,8 +149,9 @@ class MessageProperties extends ChangeNotifier {
           child: Column(
             children: [
               SizedBox(
-                height: 42.0 * buttonList.length,
+                height: 58.0 * buttonList.length,
                 child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: buttonList.length,
                   itemBuilder: (context, index) => buttonList[index]
                 ),
@@ -159,7 +166,10 @@ class MessageProperties extends ChangeNotifier {
 
     if (!imgCheck) agentMessageImage.add('none');
 
-    scrollBindingEvent();
+    if(userMessage.isNotEmpty) {
+      scrollBindingEvent();
+    }
+
     notifyListeners();
   }
 
