@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:template/models/message_properties.dart';
 
@@ -32,7 +33,6 @@ class MainBody extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8.0),
-
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -46,7 +46,12 @@ class MainBody extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 65),
+                        constraints: BoxConstraints(
+                          minWidth: 120.0,
+                          maxWidth: MediaQuery.of(context).size.width < 580.0
+                            ?  MediaQuery.of(context).size.width - 65.0
+                            :  500.0
+                        ),
                         child: Card(
                           elevation: 0.0,
                           color: const Color(0xffedf4ff),
@@ -64,10 +69,14 @@ class MainBody extends StatelessWidget {
                                 context.read<MessageProperties>().agentMessageImage[index] == 'none' ? const Visibility(visible: false, child: Text('NONE')) :
                                 Center(
                                   child: SizedBox(
-                                    height: MediaQuery.of(context).size.height / 3.5,
+                                    height: MediaQuery.of(context).size.height / 4,
                                     child: Image.network(context.read<MessageProperties>().agentMessageImage[index])),
                                 ),
-                                Html(data: context.watch<MessageProperties>().agentMessage[index], shrinkWrap: true, style: {"body":Style(margin: EdgeInsets.zero, padding: EdgeInsets.zero)}),
+                                Html(
+                                  data: context.watch<MessageProperties>().agentMessage[index],
+                                  shrinkWrap: true,
+                                  style: {"body":Style(margin: EdgeInsets.zero, padding: EdgeInsets.zero)},
+                                ),
                                 context.read<MessageProperties>().agentButton[index] == 'none'
                                   ? const Visibility(visible: false, child: Text('NONE'))
                                   : context.read<MessageProperties>().agentButton[index]

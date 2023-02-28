@@ -95,6 +95,7 @@ class MessageProperties extends ChangeNotifier {
     var imgCheck = false;
 
     var buttonList = [];
+    var dropDownList = [];
     // 내가 필요한 정보 : 텍스트, 버튼 인텐트
     for (int i=0; i<dataList.length; i++) {
       List tempButton = [];
@@ -125,7 +126,8 @@ class MessageProperties extends ChangeNotifier {
             if(tempButton.length == 2) {
               buttonList.add(
                 Padding(padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  child: TextButton(
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(backgroundColor: Colors.white),
                     onPressed: () {
                       if (tempButton[1].toString().contains('https')) {
                         launchUrl(Uri.parse('${tempButton[1]}'));
@@ -155,7 +157,7 @@ class MessageProperties extends ChangeNotifier {
                   itemCount: buttonList.length,
                   itemBuilder: (context, index) => buttonList[index]
                 ),
-              ),
+              )
             ],
           ),
         ),

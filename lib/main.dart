@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:template/models/message_properties.dart';
 import 'package:template/screens/main_app_bar.dart';
@@ -6,15 +7,19 @@ import 'package:template/screens/main_body.dart';
 import 'package:template/screens/main_drawer.dart';
 import 'package:template/screens/main_text_field.dart';
 import 'package:template/widgets/dialog/c_dialog.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
-void main() => runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<MessageProperties>(create: (context) => MessageProperties()),
-      ],
-      child: const MainApp(),
-    )
-);
+void main() {
+  setUrlStrategy(PathUrlStrategy());
+  runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<MessageProperties>(create: (context) => MessageProperties()),
+        ],
+        child: const MainApp(),
+      )
+  );
+}
 
 class MainApp extends StatelessWidget {
   const MainApp({Key? key}) : super(key: key);
@@ -23,12 +28,15 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: '충남대학교',
+      title: '충남대학교 챗봇',
       theme: ThemeData(
         useMaterial3: true,
         //materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         materialTapTargetSize: MaterialTapTargetSize.padded,
         visualDensity: VisualDensity.standard,
+        textTheme: GoogleFonts.notoSansNKoTextTheme(
+          Theme.of(context).textTheme
+        )
       ),
       home: const MainPage(),
     );
