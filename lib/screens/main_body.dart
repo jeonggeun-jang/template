@@ -47,7 +47,6 @@ class MainBody extends StatelessWidget {
                     children: [
                       Container(
                         constraints: BoxConstraints(
-                          minWidth: 120.0,
                           maxWidth: MediaQuery.of(context).size.width < 510.0
                             ?  MediaQuery.of(context).size.width - 65.0
                             :  445.0
