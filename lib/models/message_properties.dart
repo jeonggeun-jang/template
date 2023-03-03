@@ -127,7 +127,7 @@ class MessageProperties extends ChangeNotifier {
               buttonList.add(
                 Padding(padding: const EdgeInsets.symmetric(vertical: 5.0),
                   child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(backgroundColor: Colors.white),
+                    style: OutlinedButton.styleFrom(backgroundColor: Colors.white, side: const BorderSide(color: Colors.transparent)),
                     onPressed: () {
                       if (tempButton[1].toString().contains('https')) {
                         launchUrl(Uri.parse('${tempButton[1]}'));
